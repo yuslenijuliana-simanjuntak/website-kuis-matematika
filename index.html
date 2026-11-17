@@ -1,0 +1,603 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Matematika SMA</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #172554, #4338ca, #7c3aed);
+            min-height: 100vh;
+            padding: 25px 15px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .header .icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #e0e7ff;
+            font-size: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .student-info {
+            margin-bottom: 20px;
+        }
+
+        .student-info label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .student-info input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .student-info input:focus {
+            border-color: #6366f1;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 9px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            transition: width 0.3s;
+        }
+
+        .question {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .question h3 {
+            font-size: 17px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .number {
+            display: inline-block;
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 5px 11px;
+            border-radius: 7px;
+            margin-right: 7px;
+            font-size: 14px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            margin: 8px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option:hover {
+            background: #eef2ff;
+            border-color: #818cf8;
+        }
+
+        .option input {
+            accent-color: #4f46e5;
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+        }
+
+        .option:has(input:checked) {
+            background: #eef2ff;
+            border-color: #6366f1;
+        }
+
+        .submit-btn, .reset-btn {
+            width: 100%;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .submit-btn {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background: #0f766e;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .reset-btn:hover {
+            background: #115e59;
+        }
+
+        .result {
+            display: none;
+            text-align: center;
+            margin-bottom: 25px;
+            background: #eef2ff;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .result h2 {
+            color: #3730a3;
+            margin-bottom: 10px;
+        }
+
+        .score {
+            font-size: 55px;
+            font-weight: bold;
+            color: #4f46e5;
+            margin: 10px 0;
+        }
+
+        .result p {
+            color: #475569;
+        }
+
+        .review {
+            display: none;
+        }
+
+        .review h2 {
+            color: #3730a3;
+            margin-bottom: 20px;
+        }
+
+        .review-item {
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            background: #f8fafc;
+            border-left: 5px solid #94a3b8;
+        }
+
+        .review-item.correct {
+            border-left-color: #16a34a;
+        }
+
+        .review-item.wrong {
+            border-left-color: #dc2626;
+        }
+
+        .review-item h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .review-item p {
+            margin: 7px 0;
+            line-height: 1.6;
+        }
+
+        .correct-text {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .wrong-text {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .explanation {
+            background: #eef2ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #e0e7ff;
+            font-size: 13px;
+            padding: 15px;
+        }
+
+        @media(max-width: 600px) {
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .card {
+                padding: 17px;
+            }
+
+            .question {
+                padding: 15px;
+            }
+
+            .question h3 {
+                font-size: 15px;
+            }
+
+            .score {
+                font-size: 45px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="icon">📐</div>
+        <h1>KUIS MATEMATIKA SMA</h1>
+        <p>Uji kemampuanmu dan raih nilai terbaik!</p>
+    </div>
+
+    <div class="card">
+
+        <div class="student-info">
+            <label for="studentName">Nama Siswa</label>
+            <input type="text" id="studentName"
+                   placeholder="Masukkan nama lengkap..." required>
+        </div>
+
+        <div class="progress-info">
+            <span>Progres Pengerjaan</span>
+            <span id="progressText">0 dari 5 soal</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <form id="quizForm">
+
+            <div id="questions"></div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                🚀 KIRIM JAWABAN
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="card result" id="result">
+        <h2>🎉 HASIL KUIS</h2>
+        <p id="studentResult"></p>
+        <div class="score" id="score">0</div>
+        <p id="scoreMessage"></p>
+    </div>
+
+    <div class="card review" id="review">
+        <h2>📖 Kunci Jawaban dan Pembahasan</h2>
+        <div id="reviewContent"></div>
+
+        <button class="reset-btn" onclick="resetQuiz()">
+            🔄 ULANGI KUIS
+        </button>
+    </div>
+
+    <div class="footer">
+        © 2026 | Kuis Matematika SMA
+        <br>Belajar Matematika dengan Semangat!
+    </div>
+
+</div>
+
+<script>
+
+const questions = [
+    {
+        question: "Hasil dari 2³ × 2² adalah ...",
+        options: ["A. 16", "B. 24", "C. 32", "D. 64", "E. 128"],
+        answer: 2,
+        explanation: "Gunakan sifat perkalian bilangan berpangkat dengan basis sama: aᵐ × aⁿ = aᵐ⁺ⁿ. Jadi, 2³ × 2² = 2⁵ = 32."
+    },
+    {
+        question: "Jika 3x + 5 = 20, nilai x adalah ...",
+        options: ["A. 3", "B. 4", "C. 5", "D. 6", "E. 7"],
+        answer: 2,
+        explanation: "3x + 5 = 20, maka 3x = 20 - 5 = 15. Jadi, x = 15/3 = 5."
+    },
+    {
+        question: "Nilai dari √144 + √25 adalah ...",
+        options: ["A. 12", "B. 15", "C. 17", "D. 19", "E. 20"],
+        answer: 1,
+        explanation: "√144 = 12 dan √25 = 5. Jadi, 12 + 5 = 17. Jawaban yang benar adalah C."
+    },
+    {
+        question: "Diketahui barisan aritmetika 3, 7, 11, 15, ... Suku ke-10 adalah ...",
+        options: ["A. 35", "B. 37", "C. 39", "D. 41", "E. 43"],
+        answer: 2,
+        explanation: "Rumus suku ke-n adalah Un = a + (n-1)b. Diketahui a = 3, b = 4, n = 10. U10 = 3 + (9 × 4) = 39."
+    },
+    {
+        question: "Hasil dari sin 30° + cos 60° adalah ...",
+        options: ["A. 0", "B. 1/2", "C. 1", "D. 3/2", "E. 2"],
+        answer: 2,
+        explanation: "sin 30° = 1/2 dan cos 60° = 1/2. Jadi, 1/2 + 1/2 = 1."
+    }
+];
+
+const letters = ["A", "B", "C", "D", "E"];
+
+const questionsContainer = document.getElementById("questions");
+const quizForm = document.getElementById("quizForm");
+
+function loadQuestions() {
+    questionsContainer.innerHTML = "";
+
+    questions.forEach((q, index) => {
+        let html = `
+            <div class="question">
+                <h3>
+                    <span class="number">Soal ${index + 1}</span>
+                    ${q.question}
+                </h3>
+        `;
+
+        q.options.forEach((option, i) => {
+            html += `
+                <label class="option">
+                    <input type="radio"
+                           name="question${index}"
+                           value="${i}">
+                    <span>${option}</span>
+                </label>
+            `;
+        });
+
+        html += `</div>`;
+
+        questionsContainer.innerHTML += html;
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener("change", updateProgress);
+    });
+
+    updateProgress();
+}
+
+function updateProgress() {
+    let answered = 0;
+
+    questions.forEach((q, index) => {
+        if (document.querySelector(
+            `input[name="question${index}"]:checked`
+        )) {
+            answered++;
+        }
+    });
+
+    document.getElementById("progressText").textContent =
+        `${answered} dari 5 soal`;
+
+    document.getElementById("progressFill").style.width =
+        `${answered / 5 * 100}%`;
+}
+
+quizForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("studentName").value.trim();
+
+    if (!name) {
+        alert("Silakan masukkan nama terlebih dahulu!");
+        document.getElementById("studentName").focus();
+        return;
+    }
+
+    let score = 0;
+    let answers = [];
+
+    for (let i = 0; i < questions.length; i++) {
+        const selected = document.querySelector(
+            `input[name="question${i}"]:checked`
+        );
+
+        if (!selected) {
+            alert(`Soal nomor ${i + 1} belum dijawab!`);
+            return;
+        }
+
+        const answer = Number(selected.value);
+
+        answers.push(answer);
+
+        if (answer === questions[i].answer) {
+            score++;
+        }
+    }
+
+    const finalScore = score * 20;
+
+    document.getElementById("studentResult").textContent =
+        "Nama: " + name;
+
+    document.getElementById("score").textContent =
+        finalScore;
+
+    let message = "";
+
+    if (finalScore === 100) {
+        message = "Luar biasa! Semua jawaban benar! 🏆";
+    } else if (finalScore >= 80) {
+        message = "Hebat! Hasil belajarmu sangat baik! 🌟";
+    } else if (finalScore >= 60) {
+        message = "Bagus! Terus tingkatkan kemampuanmu! 👍";
+    } else if (finalScore >= 40) {
+        message = "Tetap semangat, terus belajar! 💪";
+    } else {
+        message = "Jangan menyerah! Ayo belajar kembali! 📚";
+    }
+
+    document.getElementById("scoreMessage").textContent =
+        `${message} (${score} dari 5 jawaban benar)`;
+
+    showReview(answers);
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("review").style.display = "block";
+
+    quizForm.querySelectorAll("input").forEach(input => {
+        input.disabled = true;
+    });
+
+    document.getElementById("studentName").disabled = true;
+    document.getElementById("submitBtn").disabled = true;
+    document.getElementById("submitBtn").style.opacity = "0.5";
+
+    document.getElementById("result").scrollIntoView({
+        behavior: "smooth"
+    });
+});
+
+function showReview(answers) {
+    const reviewContent = document.getElementById("reviewContent");
+
+    reviewContent.innerHTML = "";
+
+    questions.forEach((q, index) => {
+
+        const correct = answers[index] === q.answer;
+
+        const selectedText = q.options[answers[index]];
+
+        const correctText = q.options[q.answer];
+
+        const div = document.createElement("div");
+
+        div.className = "review-item " +
+            (correct ? "correct" : "wrong");
+
+        div.innerHTML = `
+            <h3>Soal ${index + 1}</h3>
+
+            <p>${q.question}</p>
+
+            <p>
+                Jawaban siswa:
+                <strong>${selectedText}</strong>
+                <span class="${correct ? 'correct-text' : 'wrong-text'}">
+                    ${correct ? '✓ Benar' : '✗ Salah'}
+                </span>
+            </p>
+
+            <p>
+                Kunci jawaban:
+                <strong class="correct-text">${correctText}</strong>
+            </p>
+
+            <div class="explanation">
+                <strong>💡 Pembahasan:</strong>
+                <p>${q.explanation}</p>
+            </div>
+        `;
+
+        reviewContent.appendChild(div);
+    });
+}
+
+function resetQuiz() {
+    quizForm.reset();
+
+    document.getElementById("studentName").disabled = false;
+
+    document.getElementById("submitBtn").disabled = false;
+    document.getElementById("submitBtn").style.opacity = "1";
+
+    quizForm.querySelectorAll("input").forEach(input => {
+        input.disabled = false;
+    });
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("review").style.display = "none";
+
+    document.getElementById("score").textContent = "0";
+
+    updateProgress();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+loadQuestions();
+
+</script>
+
+</body>
+</html>
